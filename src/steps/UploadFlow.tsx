@@ -8,6 +8,7 @@ import { mapWorkbook } from "../utils/mapWorkbook"
 import { ValidationStep } from "./ValidationStep/ValidationStep"
 import { addErrorsAndRunHooks } from "./ValidationStep/utils/dataMutations"
 import { MatchColumnsStep } from "./MatchColumnsStep/MatchColumnsStep"
+import { ConvertPriceStep } from "./ConvertPriceStep/ConvertPriceStep"
 import { exceedsMaxRecords } from "../utils/exceedsMaxRecords"
 import { useRsi } from "../hooks/useRsi"
 import type { RawData } from "../types"
@@ -17,6 +18,7 @@ export enum StepType {
   selectSheet = "selectSheet",
   selectHeader = "selectHeader",
   matchColumns = "matchColumns",
+  convertPrice = "convertPrice",
   validateData = "validateData",
 }
 export type StepState =
@@ -35,6 +37,10 @@ export type StepState =
       type: StepType.matchColumns
       data: RawData[]
       headerValues: RawData
+    }
+  | {
+      type: StepType.convertPrice
+      data: any[]
     }
   | {
       type: StepType.validateData
@@ -150,6 +156,23 @@ export const UploadFlow = ({ state, onNext, onBack }: Props) => {
           onContinue={async (values, rawData, columns) => {
             try {
               const data = await matchColumnsStepHook(values, rawData, columns)
+              onNext({
+                type: StepType.convertPrice,
+                data,
+              })
+            } catch (e) {
+              errorToast((e as Error).message)
+            }
+          }}
+          onBack={onBack}
+        />
+      )
+    case StepType.convertPrice:
+      return (
+        <ConvertPriceStep
+          data={state.data}
+          onContinue={async (data) => {
+            try {
               const dataWithMeta = await addErrorsAndRunHooks(data, fields, rowHook, tableHook)
               onNext({
                 type: StepType.validateData,

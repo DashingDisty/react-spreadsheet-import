@@ -80,6 +80,42 @@ const fields = [
     },
     example: "true",
   },
+  {
+    label: "Target Price",
+    key: "target_price",
+    alternateMatches: ["price", "cost", "amount"],
+    fieldType: {
+      type: "input",
+    },
+    example: "1,234.56",
+  },
+  {
+    label: "Quantity",
+    key: "quantity",
+    alternateMatches: ["qty", "amount"],
+    fieldType: {
+      type: "input",
+    },
+    example: "100",
+  },
+  {
+    label: "Discount",
+    key: "discount",
+    alternateMatches: ["discount rate", "discount %"],
+    fieldType: {
+      type: "input",
+    },
+    example: "10.5",
+  },
+  {
+    label: "Category",
+    key: "category",
+    alternateMatches: ["type", "product type"],
+    fieldType: {
+      type: "input",
+    },
+    example: "Electronics",
+  },
 ] as const
 
 const mockComponentBehaviourForTypes = <T extends string>(props: RsiProps<T>) => props
