@@ -171,6 +171,7 @@ export const UploadFlow = ({ state, onNext, onBack }: Props) => {
       return (
         <ConvertPriceStep
           data={state.data}
+          fields={fields}
           onContinue={async (data) => {
             try {
               const dataWithMeta = await addErrorsAndRunHooks(data, fields, rowHook, tableHook)

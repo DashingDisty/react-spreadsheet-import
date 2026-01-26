@@ -5,9 +5,16 @@ interface ColumnSelectorProps {
   selectedColumns: string[]
   onToggle: (column: string) => void
   europeanFormatColumns: Record<string, boolean>
+  getLabel: (key: string) => string
 }
 
-export const ColumnSelector = ({ columns, selectedColumns, onToggle, europeanFormatColumns }: ColumnSelectorProps) => {
+export const ColumnSelector = ({
+  columns,
+  selectedColumns,
+  onToggle,
+  europeanFormatColumns,
+  getLabel,
+}: ColumnSelectorProps) => {
   if (columns.length === 0) {
     return null
   }
@@ -25,7 +32,7 @@ export const ColumnSelector = ({ columns, selectedColumns, onToggle, europeanFor
             bg={europeanFormatColumns[column] ? "blue.50" : "gray.50"}
           >
             <Checkbox isChecked={selectedColumns.includes(column)} onChange={() => onToggle(column)} colorScheme="blue">
-              <Text fontWeight="medium">{column}</Text>
+              <Text fontWeight="medium">{getLabel(column)}</Text>
               {europeanFormatColumns[column] && (
                 <Text fontSize="xs" color="blue.600">
                   European format detected

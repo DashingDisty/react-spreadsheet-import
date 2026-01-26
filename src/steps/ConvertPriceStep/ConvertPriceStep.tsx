@@ -16,24 +16,27 @@ import {
 } from "@chakra-ui/react"
 import { ContinueButton } from "../../components/ContinueButton"
 import { useRsi } from "../../hooks/useRsi"
-import type { Data } from "../../types"
+import type { Data, Fields } from "../../types"
 import { detectNumericColumns, detectEuropeanFormat } from "./utils/formatDetection"
 import { convertDataFormat } from "./utils/formatConversion"
 import { ColumnSelector } from "./components/ColumnSelector"
 
 export type ConvertPriceStepProps<T extends string> = {
   data: Data<T>[]
+  fields: Fields<T>
   onContinue: (data: Data<T>[]) => void
   onBack?: () => void
 }
 
-export const ConvertPriceStep = <T extends string>({ data, onContinue, onBack }: ConvertPriceStepProps<T>) => {
+export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, onBack }: ConvertPriceStepProps<T>) => {
   const { translations } = useRsi<T>()
   const [numericColumns, setNumericColumns] = useState<T[]>([])
   const [europeanFormatColumns, setEuropeanFormatColumns] = useState<Record<T, boolean>>({} as Record<T, boolean>)
   const [selectedColumns, setSelectedColumns] = useState<T[]>([])
   const [hasEuropeanData, setHasEuropeanData] = useState(false)
   const [shouldSkip, setShouldSkip] = useState(false)
+
+  const getLabel = (key: T) => fields.find((f) => f.key === key)?.label || (key as string)
 
   // Detect numeric columns and European format on mount
   useEffect(() => {
@@ -122,6 +125,7 @@ export const ConvertPriceStep = <T extends string>({ data, onContinue, onBack }:
             selectedColumns={selectedColumns as string[]}
             onToggle={handleColumnToggle as (column: string) => void}
             europeanFormatColumns={europeanFormatColumns as Record<string, boolean>}
+            getLabel={getLabel as (key: string) => string}
           />
         </Box>
 
@@ -142,7 +146,7 @@ export const ConvertPriceStep = <T extends string>({ data, onContinue, onBack }:
                 <Tbody>
                   {selectedColumns.map((column) => (
                     <Tr key={column as string}>
-                      <Td fontWeight="medium">{column as string}</Td>
+                      <Td fontWeight="medium">{getLabel(column)}</Td>
                       <Td>
                         {previewData.map((row, idx) => (
                           <Box key={idx} py={1}>
