@@ -47,6 +47,15 @@ export const translations = {
     discardButtonTitle: "Discard selected rows",
     filterSwitchTitle: "Show only rows with errors",
   },
+  convertPriceStep: {
+    title: "Convert Number Format",
+    nextButtonTitle: "Convert to English Format",
+    backButtonTitle: "Back",
+    skipButton: "Skip this step",
+    continueButton: "Convert to English Format",
+    europeanDetected:
+      "We detected numeric columns with European format (comma as decimal separator). Select the columns you want to convert to English format (dot as decimal separator).",
+  },
   alerts: {
     confirmClose: {
       headerTitle: "Exit import flow",
