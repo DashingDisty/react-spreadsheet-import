@@ -1,6 +1,6 @@
 {
-  "name": "react-spreadsheet-import",
-  "version": "4.8.0",
+  "name": "react-spreadsheet-import-dashing",
+  "version": "5.8.1",
   "description": "React spreadsheet import for xlsx and csv files with column matching and validation",
   "main": "./dist-commonjs/index.js",
   "module": "./dist/index.js",
@@ -62,7 +62,7 @@
     "framer-motion": "^10.16.4",
     "js-levenshtein": "1.1.6",
     "lodash": "4.17.21",
-    "react-data-grid": "^7.0.0-beta.47",
+    "react-data-grid": "7.0.0-beta.47",
     "react-dropzone": "14.2.3",
     "react-icons": "4.11.0",
     "uuid": "^9.0.1",
