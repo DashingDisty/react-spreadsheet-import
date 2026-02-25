@@ -3,6 +3,7 @@ import {
   Box,
   Heading,
   Button,
+  ModalBody,
   Alert,
   AlertIcon,
   AlertDescription,
@@ -105,8 +106,8 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
   }
 
   return (
-    <Box display="flex" flexDirection="column" h="100%" w="100%">
-      <Box flex="1" overflowY="auto" pr={2}>
+    <>
+      <ModalBody display="flex" flexDirection="column" minH={0} p={8} overflow="hidden">
         <Heading size="md" mb={4}>
           {translations.convertPriceStep?.title || "Convert Number Format"}
         </Heading>
@@ -115,7 +116,7 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
           <AlertIcon />
           <AlertDescription>
             {translations.convertPriceStep?.europeanDetected ||
-              "We detected numeric columns with a European format (comma as decimal separator). Select the columns you want to convert to English format (dot as decimal separator)."}
+              "We detected numeric columns with a European format (comma as decimal separator). Select the columns you want to normalize the number format (dot as decimal separator)."}
           </AlertDescription>
         </Alert>
 
@@ -130,7 +131,7 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
         </Box>
 
         {selectedColumns.length > 0 && previewData.length > 0 && (
-          <Box mb={4} p={4} borderWidth="1px" borderRadius="md" bg="gray.50" maxH="400px" overflowY="auto">
+          <Box flex={1} minH={0} p={4} borderWidth="1px" borderRadius="md" bg="gray.50" overflowY="auto" mb={2}>
             <Text fontWeight="bold" mb={3}>
               Preview (first {previewData.length} rows):
             </Text>
@@ -168,22 +169,18 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
             </Box>
           </Box>
         )}
-      </Box>
-
-      <Box flexShrink={0} mt={4}>
-        <ContinueButton
-          onContinue={handleConvert}
-          onBack={onBack}
-          title={translations.convertPriceStep?.continueButton || "Convert to English Format"}
-          backTitle={translations.matchColumnsStep?.backButtonTitle || "Back"}
-        />
-
-        <Box mt={2} textAlign="center">
+        <Box mt="auto" textAlign="center">
           <Button onClick={handleSkip} variant="link" size="sm" color="gray.600">
             {translations.convertPriceStep?.skipButton || "Skip this step"}
           </Button>
         </Box>
-      </Box>
-    </Box>
+      </ModalBody>
+      <ContinueButton
+        onContinue={handleConvert}
+        onBack={onBack}
+        title={translations.convertPriceStep?.continueButton || "Normalize Number Format"}
+        backTitle={translations.matchColumnsStep?.backButtonTitle || "Back"}
+      />
+    </>
   )
 }
