@@ -22,13 +22,6 @@ import { detectNumericColumns, detectEuropeanFormat } from "./utils/formatDetect
 import { convertDataFormat } from "./utils/formatConversion"
 import { ColumnSelector } from "./components/ColumnSelector"
 
-const EXCLUDED_CONVERSION_COLUMNS = new Set(["quantity", "partnumber", "name"])
-
-const shouldExcludeFromConversion = (columnKey: string): boolean => {
-  const normalizedKey = columnKey.toLowerCase().replace(/[^a-z0-9]/g, "")
-  return EXCLUDED_CONVERSION_COLUMNS.has(normalizedKey)
-}
-
 export type ConvertPriceStepProps<T extends string> = {
   data: Data<T>[]
   fields: Fields<T>
@@ -44,11 +37,25 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
   const [hasEuropeanData, setHasEuropeanData] = useState(false)
   const [shouldSkip, setShouldSkip] = useState(false)
 
+  const numericFieldColumns = useMemo(
+    () =>
+      fields
+        .filter((field) => field.fieldType.type === "input" && (field.fieldType.isNumeric || field.isNumeric))
+        .map((field) => field.key),
+    [fields],
+  )
+
   const getLabel = (key: T) => fields.find((f) => f.key === key)?.label || (key as string)
 
   // Detect numeric columns and European format on mount
   useEffect(() => {
-    const detected = detectNumericColumns(data).filter((column) => !shouldExcludeFromConversion(column))
+    const hasNumericFieldConfiguration = numericFieldColumns.length > 0
+    const detected = detectNumericColumns(
+      data,
+      0.4,
+      hasNumericFieldConfiguration ? (numericFieldColumns as T[]) : undefined,
+    )
+
     setNumericColumns(detected)
 
     if (detected.length > 0) {
@@ -71,7 +78,7 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
       // No numeric columns, skip this step
       setShouldSkip(true)
     }
-  }, [data])
+  }, [data, numericFieldColumns])
 
   // Auto-skip if no European data detected
   useEffect(() => {

@@ -58,6 +58,20 @@ describe("formatDetection", () => {
       const numericColumns = detectNumericColumns([])
       expect(numericColumns).toEqual([])
     })
+
+    it("should only evaluate candidate columns when provided", () => {
+      const data = [
+        { partnumber: "12345", qty: "100", vendorCost: "1.234,56" },
+        { partnumber: "67890", qty: "200", vendorCost: "2.345,67" },
+        { partnumber: "12321", qty: "300", vendorCost: "3.456,78" },
+      ]
+
+      const numericColumns = detectNumericColumns(data, 0.4, ["vendorCost"])
+
+      expect(numericColumns).toEqual(["vendorCost"])
+      expect(numericColumns).not.toContain("partnumber")
+      expect(numericColumns).not.toContain("qty")
+    })
   })
 
   describe("detectEuropeanFormat", () => {
