@@ -22,6 +22,13 @@ import { detectNumericColumns, detectEuropeanFormat } from "./utils/formatDetect
 import { convertDataFormat } from "./utils/formatConversion"
 import { ColumnSelector } from "./components/ColumnSelector"
 
+const EXCLUDED_CONVERSION_COLUMNS = new Set(["quantity", "partnumber", "name"])
+
+const shouldExcludeFromConversion = (columnKey: string): boolean => {
+  const normalizedKey = columnKey.toLowerCase().replace(/[^a-z0-9]/g, "")
+  return EXCLUDED_CONVERSION_COLUMNS.has(normalizedKey)
+}
+
 export type ConvertPriceStepProps<T extends string> = {
   data: Data<T>[]
   fields: Fields<T>
@@ -41,7 +48,7 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
 
   // Detect numeric columns and European format on mount
   useEffect(() => {
-    const detected = detectNumericColumns(data)
+    const detected = detectNumericColumns(data).filter((column) => !shouldExcludeFromConversion(column))
     setNumericColumns(detected)
 
     if (detected.length > 0) {
