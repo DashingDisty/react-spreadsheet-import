@@ -48,14 +48,18 @@ export const isEuropeanFormat = (value: string): boolean => {
  * Detect numeric columns that might contain prices or numbers
  * Returns array of column keys that are numeric
  */
-export const detectNumericColumns = <T extends string>(data: Data<T>[], threshold = 0.4): T[] => {
+export const detectNumericColumns = <T extends string>(
+  data: Data<T>[],
+  threshold = 0.4,
+  candidateColumns?: T[],
+): T[] => {
   if (data.length === 0) return []
 
   const sampleSize = Math.min(100, data.length) // Check first 100 rows for performance
   const sampleData = data.slice(0, sampleSize)
 
   // Get all keys from the first row
-  const keys = Object.keys(sampleData[0]) as T[]
+  const keys = candidateColumns && candidateColumns.length > 0 ? candidateColumns : (Object.keys(sampleData[0]) as T[])
 
   return keys.filter((key) => {
     const numericCount = sampleData.filter((row) => {

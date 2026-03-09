@@ -73,6 +73,8 @@ export type Field<T extends string> = {
   fieldType: Checkbox | Select | Input
   // UI-facing values shown to user as field examples pre-upload phase
   example?: string
+  // Backward-compatible numeric marker; prefer `fieldType.isNumeric` for new configs
+  isNumeric?: boolean
 }
 
 export type Checkbox = {
@@ -96,6 +98,8 @@ export type SelectOption = {
 
 export type Input = {
   type: "input"
+  // Marks this input as numeric so numeric-specific flows can opt in explicitly
+  isNumeric?: boolean
 }
 
 export type Validation = RequiredValidation | UniqueValidation | RegexValidation

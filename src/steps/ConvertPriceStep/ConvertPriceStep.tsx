@@ -37,11 +37,25 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
   const [hasEuropeanData, setHasEuropeanData] = useState(false)
   const [shouldSkip, setShouldSkip] = useState(false)
 
+  const numericFieldColumns = useMemo(
+    () =>
+      fields
+        .filter((field) => field.fieldType.type === "input" && (field.fieldType.isNumeric || field.isNumeric))
+        .map((field) => field.key),
+    [fields],
+  )
+
   const getLabel = (key: T) => fields.find((f) => f.key === key)?.label || (key as string)
 
   // Detect numeric columns and European format on mount
   useEffect(() => {
-    const detected = detectNumericColumns(data)
+    const hasNumericFieldConfiguration = numericFieldColumns.length > 0
+    const detected = detectNumericColumns(
+      data,
+      0.4,
+      hasNumericFieldConfiguration ? (numericFieldColumns as T[]) : undefined,
+    )
+
     setNumericColumns(detected)
 
     if (detected.length > 0) {
@@ -64,7 +78,7 @@ export const ConvertPriceStep = <T extends string>({ data, fields, onContinue, o
       // No numeric columns, skip this step
       setShouldSkip(true)
     }
-  }, [data])
+  }, [data, numericFieldColumns])
 
   // Auto-skip if no European data detected
   useEffect(() => {
