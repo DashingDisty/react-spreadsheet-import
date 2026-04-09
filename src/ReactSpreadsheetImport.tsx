@@ -6,7 +6,7 @@ import { Providers } from "./components/Providers"
 import type { RsiProps } from "./types"
 import { ModalWrapper } from "./components/ModalWrapper"
 import { translations } from "./translationsRSIProps"
-import "react-data-grid/lib/styles.css"
+import "./css/table.css"
 
 export const defaultTheme = themeOverrides
 
