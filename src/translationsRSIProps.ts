@@ -23,6 +23,7 @@ export const translations = {
     title: "Select header row",
     nextButtonTitle: "Next",
     backButtonTitle: "Back",
+    removeHeaderRowLabel: "The top line will be removed as the header",
   },
   matchColumnsStep: {
     title: "Match Columns",
