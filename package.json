@@ -1,6 +1,6 @@
 {
   "name": "react-spreadsheet-import-dashing",
-  "version": "5.8.1",
+  "version": "5.8.8",
   "description": "React spreadsheet import for xlsx and csv files with column matching and validation",
   "main": "./dist-commonjs/index.js",
   "module": "./dist/index.js",
